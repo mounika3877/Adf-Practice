@@ -1,0 +1,81 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Ds_dataflow_src",
+						"type": "DatasetReference"
+					},
+					"name": "SourceSalesFiles"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "Ds_transformSales_csv",
+						"type": "DatasetReference"
+					},
+					"name": "sinkTransformSalesdata"
+				}
+			],
+			"transformations": [
+				{
+					"name": "selectcolumns"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "splitGeo"
+				},
+				{
+					"name": "aggregateSales"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Sales Person} as string,",
+				"          Geo as string,",
+				"          Product as string,",
+				"          Ship_Date as string,",
+				"          Amount as string,",
+				"          Boxes as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> SourceSalesFiles",
+				"SourceSalesFiles select(mapColumn(",
+				"          {Sales Person},",
+				"          Geo,",
+				"          Product,",
+				"          Ship_Date,",
+				"          Amount",
+				"     ),",
+				"     partitionBy('hash', 1),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectcolumns",
+				"selectcolumns filter({Sales Person}!='SP07',",
+				"     partitionBy('hash', 1)) ~> filter1",
+				"filter1 split(Geo == 'G1',",
+				"     Geo == 'G2',",
+				"     Geo == 'G3',",
+				"     disjoint: false,",
+				"     partitionBy('hash', 1)) ~> splitGeo@(G1, G2, G3, other)",
+				"splitGeo@G1 aggregate(groupBy({Sales Person}),",
+				"     Amount = sum(toInteger(Amount)),",
+				"     partitionBy('hash', 1)) ~> aggregateSales",
+				"aggregateSales sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sinkTransformSalesdata"
+			]
+		}
+	}
+}

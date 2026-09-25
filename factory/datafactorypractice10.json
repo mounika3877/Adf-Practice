@@ -1,0 +1,15 @@
+{
+	"name": "datafactorypractice10",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "315effcc-8109-4d94-bb09-49e964f035e1",
+		"tenantId": "c109a73c-88ba-49b2-a44c-acbc38620136"
+	}
+}

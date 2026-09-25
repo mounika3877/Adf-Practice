@@ -1,0 +1,62 @@
+{
+	"name": "dataflow2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Ds_src_scd1",
+						"type": "DatasetReference"
+					},
+					"name": "sourceSCD1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "LS_AZURE_SQl",
+						"type": "DatasetReference"
+					},
+					"name": "sinkSCD1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "alterRowSCD1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Employee_ID as integer,",
+				"          First_Name as string,",
+				"          Salary as integer,",
+				"          Location as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     partitionBy('hash', 1)) ~> sourceSCD1",
+				"sourceSCD1 alterRow(upsertIf(1==1),",
+				"     partitionBy('hash', 1)) ~> alterRowSCD1",
+				"alterRowSCD1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Employee_ID as integer,",
+				"          First_Name as string,",
+				"          Salary as integer,",
+				"          Location as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['Employee_ID'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sinkSCD1"
+			]
+		}
+	}
+}
