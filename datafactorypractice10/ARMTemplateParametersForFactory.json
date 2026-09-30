@@ -1,0 +1,51 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "datafactorypractice10"
+		},
+		"AzureSqlDatabase1_password": {
+			"value": ""
+		},
+		"LS AWS S3_secretAccessKey": {
+			"value": ""
+		},
+		"LS_Blob_connectionString": {
+			"value": ""
+		},
+		"linkservice adls_accountKey": {
+			"value": ""
+		},
+		"AzureSqlDatabase1_properties_typeProperties_server": {
+			"value": "azuresql-server10.database.windows.net"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_database": {
+			"value": "azureSQLDB"
+		},
+		"AzureSqlDatabase1_properties_typeProperties_userName": {
+			"value": "azuresql"
+		},
+		"LS AKVMysql_properties_typeProperties_baseUrl": {
+			"value": "https://AKVMysql10.vault.azure.net/"
+		},
+		"LS AWS S3_properties_typeProperties_accessKeyId": {
+			"value": "AKIA3W227AMKWKG6RXA7"
+		},
+		"LS Github_properties_typeProperties_url": {
+			"value": "https://raw.githubusercontent.com/"
+		},
+		"LS_Mysql_properties_typeProperties_server": {
+			"value": "127.0.0.1"
+		},
+		"LS_Mysql_properties_typeProperties_database": {
+			"value": "info"
+		},
+		"LS_Mysql_properties_typeProperties_username": {
+			"value": "root"
+		},
+		"linkservice adls_properties_typeProperties_url": {
+			"value": "https://datalakestorage10.dfs.core.windows.net/"
+		}
+	}
+}
